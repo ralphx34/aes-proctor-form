@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AES Proctor Preferences — Midterm 1</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="card hero">
+      <p class="eyebrow">AES Proctor Scheduling</p>
+      <h1>Midterm 1 Proctor Preferences</h1>
+      <p class="lede">
+        Please report your availability for each Midterm 1 testing cohort below.
+        <strong>Earlier completed submissions receive greater priority when assignments are made.</strong>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Instructions</h2>
+      <ul>
+        <li>Select exactly <strong>3 Preferred</strong> assignments.</li>
+        <li>Use <strong>Available</strong> for sections you can proctor but do not prefer.</li>
+        <li>Use <strong>Unavailable</strong> for sections you cannot proctor.</li>
+        <li>Use <strong>GA/TA for this class</strong> when relevant for you.</li>
+      </ul>
+      <p class="note">
+        If you are unable to identify 3 preferred assignments, please contact the AES coordinator before submitting.
+      </p>
+      <p class="note">
+        Your submission is complete only after you press <strong>Submit Preferences</strong> and see the confirmation message.
+      </p>
+    </section>
+
+    <section class="card">
+      <form
+        id="proctor-form"
+        name="aes-midterm-1"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="aes-midterm-1" />
+        <input type="hidden" name="exam_period" value="Midterm 1" />
+        <input type="hidden" name="preference_payload" id="preference-payload" value="" />
+
+        <p class="hidden">
+          <label>Do not fill this out: <input name="bot-field" /></label>
+        </p>
+
+        <div class="identity-grid">
+          <label>
+            Full name
+            <input type="text" name="name" id="name" autocomplete="name" required />
+          </label>
+
+          <label>
+            University email
+            <input type="email" name="email" id="email" autocomplete="email" required />
+          </label>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <h2>Availability and Preferences</h2>
+            <p id="source-status">Loading testing cohorts…</p>
+          </div>
+          <div class="counter" id="preferred-counter">Preferred: 0 / 3</div>
+        </div>
+
+        <div id="availability-table-wrap" class="table-wrap" hidden>
+          <table id="availability-table">
+            <thead id="availability-head"></thead>
+            <tbody id="availability-body"></tbody>
+          </table>
+        </div>
+
+        <div id="form-error" class="error-box" hidden></div>
+
+        <div class="actions">
+          <button type="submit" id="submit-button">Submit Preferences</button>
+        </div>
+      </form>
+
+      <div id="success-panel" class="success-panel" hidden>
+        <h2>Preferences submitted</h2>
+        <p>Your Midterm 1 proctor availability has been recorded.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
