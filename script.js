@@ -9,8 +9,17 @@ const CONFIG = {
 
 const state = {
   cohorts: [],
-  responseSelects: []
+  responseSelects: [],
+  sort: {
+    header: null,
+    direction: "ascending"
+  }
 };
+
+const naturalCollator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base"
+});
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -110,7 +119,16 @@ function renderCohorts(records) {
 
   visibleHeaders.forEach(header => {
     const th = document.createElement("th");
-    th.textContent = header;
+    th.setAttribute("aria-sort", "none");
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "sort-button";
+    button.dataset.header = header;
+    button.innerHTML = `<span>${escapeHtml(header)}</span><span class="sort-indicator" aria-hidden="true">↕</span>`;
+    button.addEventListener("click", () => sortCohortsBy(header));
+
+    th.appendChild(button);
     headRow.appendChild(th);
   });
 
@@ -122,6 +140,7 @@ function renderCohorts(records) {
 
   records.forEach((record, index) => {
     const tr = document.createElement("tr");
+    tr.dataset.cohortIndex = String(index);
 
     visibleHeaders.forEach(header => {
       const td = document.createElement("td");
@@ -155,6 +174,110 @@ function renderCohorts(records) {
   });
 
   updatePreferredCounter();
+}
+
+function sortCohortsBy(header) {
+  if (state.sort.header === header) {
+    state.sort.direction = state.sort.direction === "ascending"
+      ? "descending"
+      : "ascending";
+  } else {
+    state.sort.header = header;
+    state.sort.direction = "ascending";
+  }
+
+  const directionMultiplier = state.sort.direction === "ascending" ? 1 : -1;
+  const tbody = document.getElementById("availability-body");
+  const rows = Array.from(tbody.rows);
+
+  rows.sort((rowA, rowB) => {
+    const indexA = Number(rowA.dataset.cohortIndex);
+    const indexB = Number(rowB.dataset.cohortIndex);
+    const comparison = compareCohortValues(
+      state.cohorts[indexA][header],
+      state.cohorts[indexB][header],
+      header
+    );
+
+    // Keep the original CSV order as a stable tie-breaker.
+    return comparison === 0
+      ? indexA - indexB
+      : comparison * directionMultiplier;
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+  updateSortIndicators();
+}
+
+function compareCohortValues(valueA, valueB, header) {
+  const a = String(valueA ?? "").trim();
+  const b = String(valueB ?? "").trim();
+
+  if (!a && !b) return 0;
+  if (!a) return 1;
+  if (!b) return -1;
+
+  if (isDateColumn(header)) {
+    const dateA = parseDateForSort(a);
+    const dateB = parseDateForSort(b);
+    if (dateA !== null && dateB !== null) return dateA - dateB;
+  }
+
+  if (isTimeColumn(header)) {
+    const timeA = parseTimeForSort(a);
+    const timeB = parseTimeForSort(b);
+    if (timeA !== null && timeB !== null) return timeA - timeB;
+  }
+
+  return naturalCollator.compare(a, b);
+}
+
+function parseDateForSort(value) {
+  const mdY = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (mdY) return Date.UTC(Number(mdY[3]), Number(mdY[1]) - 1, Number(mdY[2]));
+
+  const ymd = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (ymd) return Date.UTC(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));
+
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function isTimeColumn(header) {
+  const normalized = normalizeHeader(header);
+  return normalized === "start" || normalized === "aes end" || normalized.endsWith(" time");
+}
+
+function parseTimeForSort(value) {
+  const match = value.match(/^(\d{1,2}):(\d{2})\s*([ap]m)$/i);
+  if (!match) return null;
+
+  let hour = Number(match[1]) % 12;
+  if (match[3].toLowerCase() === "pm") hour += 12;
+  return hour * 60 + Number(match[2]);
+}
+
+function updateSortIndicators() {
+  document.querySelectorAll(".sort-button").forEach(button => {
+    const isActive = button.dataset.header === state.sort.header;
+    const th = button.closest("th");
+    const indicator = button.querySelector(".sort-indicator");
+
+    th.setAttribute("aria-sort", isActive ? state.sort.direction : "none");
+    button.classList.toggle("active", isActive);
+    indicator.textContent = isActive
+      ? (state.sort.direction === "ascending" ? "↑" : "↓")
+      : "↕";
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function updatePreferredCounter() {

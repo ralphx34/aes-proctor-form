@@ -126,6 +126,41 @@ th {
   white-space: nowrap;
 }
 
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  margin: -8px -10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: transparent;
+  color: #111827;
+  text-align: left;
+}
+
+.sort-button:hover,
+.sort-button:focus-visible {
+  background: #eef2ff;
+}
+
+.sort-button:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, .22);
+}
+
+.sort-button.active {
+  color: #1d4ed8;
+}
+
+.sort-indicator {
+  color: #6b7280;
+  font-size: .95rem;
+}
+
+.sort-button.active .sort-indicator {
+  color: #1d4ed8;
+}
+
 tbody tr:last-child td { border-bottom: 0; }
 
 .response-cell {

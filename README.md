@@ -17,6 +17,17 @@ Every cohort row gets one response:
 
 The user must select exactly 3 `Preferred` cohort assignments.
 
+## Sorting
+
+Each visible cohort column has a sortable heading. Clicking a heading sorts the
+cohorts in ascending order; clicking it again switches to descending order.
+Dates and times sort chronologically, while text and room values use natural
+alphabetical/numeric sorting.
+
+Sorting only changes the displayed row order. Existing dropdown responses stay
+with their original cohorts, and the submitted payload preserves the original
+CSV cohort order.
+
 ## Displayed columns
 
 The form displays every column in `cohort.csv` except columns explicitly listed as hidden in `script.js`.
