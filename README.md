@@ -86,3 +86,33 @@ This is display-only. The underlying CSV value is preserved unchanged in the sub
 
 - The FCFS priority sentence is bolded for salience.
 - The instructions now state that anyone genuinely unable to identify 3 preferred cohort assignments should contact the AES coordinator before submitting.
+
+## Revising previously submitted preferences
+
+The existing form now has an optional **Load previous submission (CSV)** field. The
+AES coordinator should send a proctor **only their own single-row Netlify CSV
+submission**, never the full Netlify export with other proctors' records. The
+individual CSV must retain its column headers and the `preference_payload` JSON
+field. No file is uploaded when it is selected; the browser reads it locally.
+
+The form restores name, email and responses for uniquely matched cohort rows.
+Matching uses Instructors, Course, Exam Date, Start, AES End and Room, but ignores
+Room Size. Cohorts that have been added, removed, changed or cannot be matched
+uniquely are not guessed: new/changed rows remain unselected and are highlighted.
+The user reviews all responses and submits the updated form with exactly three
+Preferred rows. Standard initial submissions work without any upload.
+
+The optional `submission_type` field is `initial` for new submissions and
+`revision` after a successful import. Netlify creates a separate submission for
+each revision. **The uploaded file does not determine FCFS priority**: the AES
+coordinator/matching process must retain the earliest valid original submission
+timestamp from Netlify and use the most recent valid responses for matching.
+This page does not enforce identity or deduplicate records server-side.
+
+### Example: extract one individual record from the Netlify export
+
+Open the full Netlify export in a spreadsheet, keep its header row and precisely
+one data row corresponding to the proctor, then save as CSV with the
+`preference_payload` column intact. If your spreadsheet application alters the
+JSON quoting, the exported file may not import correctly. Do not put the full
+Netlify export on the public website or send it to proctors.

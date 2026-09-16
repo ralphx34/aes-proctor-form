@@ -10,6 +10,7 @@ const CONFIG = {
 const state = {
   cohorts: [],
   responseSelects: [],
+  imported: false,
   sort: {
     header: null,
     direction: "ascending"
@@ -50,6 +51,120 @@ async function init() {
   }
 
   document.getElementById("proctor-form").addEventListener("submit", handleSubmit);
+  document.getElementById("previous-submission").addEventListener("change", handlePreviousSubmission);
+}
+
+// Identify an assignment by the fields proctors actually need to distinguish it.
+// The historical CSV has no stable assignment ID. Room must be included because
+// multiple assignments share their instructor/course/date/start/end fields.
+// Room Size is excluded because changing capacity does not create a new exam.
+const ASSIGNMENT_FIELDS = ["Instructors", "Course", "Exam Date", "Start", "AES End", "Room"];
+const VALID_RESPONSES = new Set(["Preferred", "Available", "Unavailable", "GA/TA for this class"]);
+
+function assignmentKey(cohort) {
+  return JSON.stringify(ASSIGNMENT_FIELDS.map(field =>
+    String(cohort[field] ?? "").trim().replace(/\s+/g, " ").toLowerCase()
+  ));
+}
+
+function countKeys(cohorts) {
+  const result = new Map();
+  cohorts.forEach(cohort => {
+    const key = assignmentKey(cohort);
+    result.set(key, (result.get(key) ?? 0) + 1);
+  });
+  return result;
+}
+
+function importError(message) {
+  const status = document.getElementById("import-status");
+  status.hidden = false;
+  status.className = "import-status import-status-error";
+  status.textContent = message;
+}
+
+function importSuccess(message) {
+  const status = document.getElementById("import-status");
+  status.hidden = false;
+  status.className = "import-status import-status-success";
+  status.textContent = message;
+}
+
+async function handlePreviousSubmission(event) {
+  const file = event.currentTarget.files?.[0];
+  if (!file) return;
+  hideError();
+  if (!state.cohorts.length) {
+    importError("The current cohort list is not available. Refresh the page and try again.");
+    event.currentTarget.value = "";
+    return;
+  }
+
+  try {
+    const rows = parseCsv(await file.text());
+    if (rows.length !== 1) {
+      throw new Error("Upload a CSV containing exactly one proctor submission. Ask the AES coordinator for your individual record, not the full Netlify export.");
+    }
+    const previous = rows[0];
+    if (!previous.name?.trim() || !previous.email?.trim() || !previous.preference_payload?.trim()) {
+      throw new Error("This CSV is missing the name, email, or preference_payload columns required for a previous submission.");
+    }
+    if (previous.exam_period?.trim() && previous.exam_period.trim() !== CONFIG.examPeriod) {
+      throw new Error("This submission belongs to a different exam period.");
+    }
+
+    let payload;
+    try {
+      payload = JSON.parse(previous.preference_payload);
+    } catch {
+      throw new Error("The previous submission contains an invalid preference_payload.");
+    }
+    if (!Array.isArray(payload) || !payload.length || payload.some(item =>
+      !item || typeof item.cohort !== "object" || !item.cohort || !VALID_RESPONSES.has(item.response)
+    )) {
+      throw new Error("The previous submission does not contain a valid set of cohort responses.");
+    }
+    const previousCounts = countKeys(payload.map(item => item.cohort));
+    const currentCounts = countKeys(state.cohorts);
+    const priorResponses = new Map(payload.map(item => [assignmentKey(item.cohort), item.response]));
+
+    const previousPreferred = payload.filter(item => item.response === "Preferred").length;
+    if (previousPreferred !== CONFIG.requiredPreferredCount) {
+      throw new Error("The previous submission does not contain exactly three Preferred assignments.");
+    }
+
+    const restored = state.cohorts.map(cohort => {
+      const key = assignmentKey(cohort);
+      return previousCounts.get(key) === 1 && currentCounts.get(key) === 1
+        ? priorResponses.get(key) ?? ""
+        : "";
+    });
+    const matched = restored.filter(Boolean).length;
+    const removed = payload.length - matched;
+    const needsReview = state.cohorts.length - matched;
+
+    // Apply only after validating everything, so a failed import never erases
+    // selections the user has already entered.
+    document.getElementById("name").value = previous.name.trim();
+    document.getElementById("email").value = previous.email.trim();
+    state.responseSelects.forEach((select, index) => {
+      select.value = restored[index];
+      select.closest("tr").classList.toggle("needs-review-row", !restored[index]);
+    });
+    state.imported = true;
+    document.getElementById("submission-type").value = "revision";
+    updatePreferredCounter();
+    const messages = [`Loaded your previous preferences for ${matched} assignment${matched === 1 ? "" : "s"}.`];
+    if (needsReview) messages.push(`${needsReview} assignment${needsReview === 1 ? " still needs" : "s still need"} a response. Please check the highlighted row${needsReview === 1 ? "" : "s"}.`);
+    if (removed) messages.push(`${removed} assignment${removed === 1 ? " from your previous submission does" : "s from your previous submission do"} not appear in the current list.`);
+    messages.push("Please review your selections, choose exactly three Preferred assignments, and submit your updated preferences.");
+    importSuccess(messages.join(" "));
+  } catch (error) {
+    importError(error.message || "Unable to import the previous submission.");
+  } finally {
+    // Allow loading the same file again after changing current selections.
+    event.currentTarget.value = "";
+  }
 }
 
 function normalizeHeader(value) {
@@ -165,7 +280,10 @@ function renderCohorts(records) {
       <option value="GA/TA for this class">GA/TA for this class</option>
     `;
 
-    select.addEventListener("change", updatePreferredCounter);
+    select.addEventListener("change", () => {
+      tr.classList.remove("needs-review-row");
+      updatePreferredCounter();
+    });
     responseTd.appendChild(select);
     tr.appendChild(responseTd);
 

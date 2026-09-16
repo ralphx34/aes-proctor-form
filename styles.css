@@ -210,3 +210,24 @@ button:disabled { opacity: .55; cursor: not-allowed; }
     flex-direction: column;
   }
 }
+
+/* Optional, client-side restoration of an individual previous submission. */
+.revision-import {
+  padding: 18px;
+  margin-bottom: 28px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+.revision-import h2 { margin-bottom: 8px; }
+.revision-import label { margin-top: 14px; margin-bottom: 7px; }
+.revision-import input[type="file"] { background: #fff; }
+.import-status {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+}
+.import-status-error { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+.needs-review-row { background: #fff7ed; }

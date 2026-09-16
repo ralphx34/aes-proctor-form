@@ -44,6 +44,7 @@
         <input type="hidden" name="form-name" value="aes-midterm-1" />
         <input type="hidden" name="exam_period" value="Midterm 1" />
         <input type="hidden" name="preference_payload" id="preference-payload" value="" />
+        <input type="hidden" name="submission_type" id="submission-type" value="initial" />
 
         <p class="hidden">
           <label>Do not fill this out: <input name="bot-field" /></label>
@@ -60,6 +61,15 @@
             <input type="email" name="email" id="email" autocomplete="email" required />
           </label>
         </div>
+
+        <section class="revision-import" aria-labelledby="revision-import-heading">
+          <h2 id="revision-import-heading">Updating previously submitted preferences?</h2>
+          <p class="note">If you requested a revision, upload the individual CSV submission sent to you by the AES coordinator. Your previous selections will be restored for matching exams. New or changed exams will require your attention. You can then revise any selection before submitting.</p>
+          <label for="previous-submission">Load previous submission (CSV)</label>
+          <input type="file" id="previous-submission" accept=".csv,text/csv" />
+          <div id="import-status" class="import-status" role="status" aria-live="polite" hidden></div>
+          <p class="note">Use only your individual submission file. Do not upload a CSV containing multiple proctors' submissions.</p>
+        </section>
 
         <div class="section-heading">
           <div>
