@@ -1,19 +1,21 @@
-Instructors,Course,Exam Date,Start,AES End,Room Size,Room
+﻿Instructors,Course,Exam Date,Start,AES End,Room Size,Room
 Robert Lantis,B251,9/23/2026,2:20 PM,4:50 PM,20,WY 015
 James Walker,E321,9/24/2026,9:35 AM,11:30 AM,1,WY 119
 "John Schwendel, Robert Lantis","E251, B251",9/24/2026,11:10 AM,1:40 PM,30,BH 308
 John Schwendel,"E251, E252",9/24/2026,2:20 PM,4:20 PM,20,BH 107
 John Schwendel,E252,9/24/2026,3:55 PM,5:50 PM,20,BH 240
 Robert Lantis,B251,9/24/2026,9:35 AM,12:10 PM,30,WY 015
+Daniela Valdivia,E251,9/24/2026,12:45 PM,3:20 PM,20,TBD
+Daniela Valdivia,E251,9/24/2026,3:55 PM,5:50 PM,20,TBD
 Manu Raghav,B251,9/29/2026,5:30 PM,7:30 PM,10,BH 018
 Manu Raghav,B251,9/29/2026,3:55 PM,5:50 PM,20,BH 240
-Manu Raghav,B251,9/29/2026,3:55 PM,5:10 PM,1,WY 119
 Manu Raghav,E362,9/29/2026,12:45 PM,2:40 PM,1,WY 202
 Aaron Zhang,E370,9/30/2026,12:45 PM,2:40 PM,10,BH 012
 "Chaesoo Han, Kerry Loaiza-Marín","E370, B251",9/30/2026,3:55 PM,6:30 PM,10,BH 012
 Khatai Aliyev,B252,9/30/2026,2:20 PM,4:50 PM,10,WH 109
 Minsu Jo,E370,9/30/2026,2:20 PM,4:20 PM,5,FF215
 Qiulan Tao,B252,9/30/2026,3:55 PM,5:50 PM,5,WY 119
+Aaron Zhang,E370,10/1/2026,1:30 PM,3:25 PM,2,WY 302
 "Changan Zheng, Hsin-Yun Chang, Jay Chen","B252, B251",10/1/2026,2:20 PM,4:50 PM,20,BH 337
 Hsin-Yun Chang,B251,10/1/2026,2:20 PM,4:20 PM,1,WY 202
 "Jungwon Park, Khawaja Hassan Mahmood, Soeun Kim","B252, B251",10/1/2026,8:00 AM,10:00 AM,20,SW103
@@ -21,9 +23,14 @@ Nastassia Krukava,E370,10/1/2026,9:35 AM,12:10 PM,30,WY 015
 Nastassia Krukava,E 370,10/1/2026,11:10 AM,1:40 PM,30,BH 308
 Nastassia Krukava,S370 (HONORS),10/1/2026,2:20 PM,4:20 PM,1,WY 329
 "Penelope Liu, Renata Carneiro","ECON-B 252, B252",10/1/2026,9:35 AM,12:10 PM,20,BH 337
-Seunghyeon Woo,E370,10/1/2026,2:20 PM,4:20 PM,1,WY 329
+Penelope Liu,B252,10/1/2026,Tentatively 09:35,Tentatively 12:10 PM,1,TBD
 Ying Zhao,B252,10/1/2026,3:55 PM,5:50 PM,1,WY 119
 Ying Zhao,B252,10/1/2026,3:55 PM,5:50 PM,1,WY 302
 Paul Graf,B251,10/1/2026,11:10 AM,1:10 PM,20,LH 120
 Paul Graf,B251,10/1/2026,11:10 AM,1:10 PM,1,WY 202
 Paul Graf,B251,10/1/2026,12:45 PM,3:20 PM,10,BH 139
+Justin Barnette,B252,10/8/2026,12:45 PM,2:40 PM,20,SE 240
+Justin Barnette,B252,10/8/2026,12:45 PM,2:40 PM,20,BH 139
+Justin Barnette,B252,10/8/2026,3:55 PM,5:50 PM,20,LH 023
+Justin Barnette,B252,10/8/2026,3:55 PM,5:50 PM,20,LH 025
+Jeffrey Zeidel,E425,10/15/2026,2:20 PM,4:20 PM,1,TBD
