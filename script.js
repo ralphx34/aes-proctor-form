@@ -1,5 +1,5 @@
 const CONFIG = {
-  examPeriod: "Midterm 1",
+  examPeriod: "Midterm 2",
   cohortCsv: "cohort.csv",
   requiredPreferredCount: 3,
 

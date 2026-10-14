@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AES Proctor Preferences — Midterm 1</title>
+  <title>AES Proctor Preferences</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="page-shell">
     <section class="card hero">
       <p class="eyebrow">AES Proctor Scheduling</p>
-      <h1>Midterm 1 Proctor Preferences</h1>
+      <h1>AES Proctor Preferences</h1>
       <p class="lede">
-        Please report your availability for each Midterm 1 testing cohort below.
+        Please report your availability for each AES Exam testing cohort below.
         <strong>Earlier completed submissions receive greater priority when assignments are made.</strong>
       </p>
     </section>
@@ -36,13 +36,13 @@
     <section class="card">
       <form
         id="proctor-form"
-        name="aes-midterm-1"
+        name="aes-proctor-preferences"
         method="POST"
         data-netlify="true"
         netlify-honeypot="bot-field"
       >
-        <input type="hidden" name="form-name" value="aes-midterm-1" />
-        <input type="hidden" name="exam_period" value="Midterm 1" />
+        <input type="hidden" name="form-name" value="aes-proctor-preferences" />
+        <input type="hidden" name="exam_period" value="Midterm 2" />
         <input type="hidden" name="preference_payload" id="preference-payload" value="" />
         <input type="hidden" name="submission_type" id="submission-type" value="initial" />
 
@@ -95,7 +95,7 @@
 
       <div id="success-panel" class="success-panel" hidden>
         <h2>Preferences submitted</h2>
-        <p>Your Midterm 1 proctor availability has been recorded.</p>
+        <p>Your proctor availability has been recorded.</p>
       </div>
     </section>
   </main>
